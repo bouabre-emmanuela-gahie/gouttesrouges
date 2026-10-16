@@ -46,11 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const slider = document.querySelector(".hero-slider");
   if (slider) {
     const slides = [...slider.querySelectorAll(".slide")];
+    const texts = [...slider.querySelectorAll("[data-slide-text]")];
     const dotsWrap = slider.querySelector(".slider-dots");
     let index = 0;
     const show = (next) => {
       index = (next + slides.length) % slides.length;
       slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
+      texts.forEach((t, i) => t.classList.toggle("is-active", i === index));
       dotsWrap?.querySelectorAll("button").forEach((d, i) => d.classList.toggle("is-active", i === index));
     };
     if (dotsWrap) {
@@ -125,4 +127,73 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  document.querySelectorAll("[data-accordion]").forEach((accordion) => {
+    const items = [...accordion.querySelectorAll(".ab-acc-item")];
+    const images = accordion.closest("section")?.querySelectorAll(".ab-mission-img") || [];
+    items.forEach((item, i) => {
+      item.querySelector(".ab-acc-btn").addEventListener("click", () => {
+        items.forEach((other, j) => {
+          other.classList.toggle("is-active", i === j);
+          other.querySelector(".ab-acc-btn").setAttribute("aria-expanded", String(i === j));
+        });
+        images.forEach((img, j) => img.classList.toggle("is-active", i === j));
+      });
+    });
+  });
+
+  document.querySelectorAll("[data-phases]").forEach((wrap) => {
+    const phases = [...wrap.querySelectorAll(".ab-phase")];
+    const images = [...wrap.querySelectorAll(".ab-phase-bg")];
+    const activate = (i) => {
+      phases.forEach((p, j) => p.classList.toggle("is-active", i === j));
+      images.forEach((img, j) => img.classList.toggle("is-active", i === j));
+    };
+    phases.forEach((phase, i) => {
+      phase.addEventListener("mouseenter", () => activate(i));
+      phase.addEventListener("focus", () => activate(i));
+      phase.addEventListener("click", () => activate(i));
+    });
+  });
+
+  document.querySelectorAll("[data-slider]").forEach((slider) => {
+    const track = slider.querySelector(".ab-slider-track");
+    const count = track ? track.children.length : 0;
+    if (!count) return;
+    let index = 0;
+    const go = (next) => {
+      index = (next + count) % count;
+      track.style.transform = `translateX(-${index * 100}%)`;
+    };
+    slider.querySelector("[data-prev]")?.addEventListener("click", () => go(index - 1));
+    slider.querySelector("[data-next]")?.addEventListener("click", () => go(index + 1));
+  });
+
+  document.querySelectorAll("[data-carousel]").forEach((track) => {
+    const wrap = track.parentElement;
+    const step = () => {
+      const card = track.firstElementChild;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+    };
+    wrap.querySelector("[data-carousel-prev]")?.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    wrap.querySelector("[data-carousel-next]")?.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+  });
+
+  const reveals = document.querySelectorAll("[data-reveal]");
+  if (reveals.length) {
+    if (!("IntersectionObserver" in window)) {
+      reveals.forEach((el) => el.classList.add("is-visible"));
+    } else {
+      const revealIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+      reveals.forEach((el) => revealIo.observe(el));
+    }
+  }
 });

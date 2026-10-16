@@ -16,11 +16,7 @@
   <div class="container footer-top">
     <div class="footer-brand">
       <a class="logo" href="<?= e(url('index.php')) ?>">
-        <svg viewBox="0 0 28 36" aria-hidden="true">
-          <path d="M14 1.5C14 1.5 2.5 14.2 2.5 22.2a11.5 11.5 0 1 0 23 0C25.5 14.2 14 1.5 14 1.5z" fill="#b3122c"/>
-          <path d="M14 13.2c.2 3.4 2.7 5.2 2.7 8.1A2.7 2.7 0 1 1 11.3 21c0-2.8 2.5-4.6 2.7-7.8z" fill="#fff" opacity=".35"/>
-        </svg>
-        Gouttes Rouges
+        <img src="<?= e(asset('img/logo-blanc.png')) ?>" alt="Gouttes Rouges" width="600" height="109">
       </a>
       <p><?= e(SITE_TAGLINE) ?> Association engagée à Abidjan et dans les villes de l'intérieur.</p>
       <div class="socials" style="margin-top:16px">
