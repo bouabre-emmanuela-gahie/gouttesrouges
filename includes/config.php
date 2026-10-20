@@ -21,6 +21,8 @@ define('SITE_EMAIL', 'gouttesrouges@gmail.com');
 define('SITE_PHONE', '+225 07 88 68 13 27');
 define('SITE_ADDRESS', 'Cocody, Abidjan, Côte d\'Ivoire');
 define('SITE_TAGLINE', 'Pour une santé menstruelle digne et accessible.');
+define('SITE_FACEBOOK', 'https://www.facebook.com/profile.php?id=100064541510692');
+define('SITE_INSTAGRAM', 'https://www.instagram.com/gouttesrouges/');
 
 $rootFs = dirname(__DIR__);
 $docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;

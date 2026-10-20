@@ -10,18 +10,18 @@ $chiffres = get_chiffres();
 $temoignages = get_temoignages();
 
 $missions = [
-    ['titre' => 'Éduquer sans tabou', 'texte' => 'Des ateliers en milieu scolaire et communautaire pour comprendre le cycle, déconstruire les mythes et adopter les bons gestes d\'hygiène, avec des mots simples et justes.', 'image' => 'img/programme-1.jpg'],
-    ['titre' => 'Équiper chaque fille', 'texte' => 'Des kits menstruels, des stocks d\'urgence dans les écoles et des dons en nature pour que plus aucune fille ne manque la classe faute de protection.', 'image' => 'img/programme-2.jpg'],
-    ['titre' => 'Porter la voix des filles', 'texte' => 'Un plaidoyer auprès des établissements, des collectivités et des institutions pour faire reconnaître la santé menstruelle comme un droit.', 'image' => 'img/programme-3.jpg'],
-    ['titre' => 'Bâtir un changement durable', 'texte' => 'Clubs, mentorat et relais communautaires formés pour que les jeunes filles deviennent elles-mêmes actrices du changement dans leur quartier.', 'image' => 'img/programme-4.jpg'],
+    ['titre' => 'Éduquer sans tabou', 'texte' => 'Des ateliers en milieu scolaire et communautaire pour comprendre le cycle, déconstruire les mythes et adopter les bons gestes d\'hygiène, avec des mots simples et justes.', 'image' => 'img/terrain-classe.jpg'],
+    ['titre' => 'Équiper chaque fille', 'texte' => 'Des kits menstruels, des stocks d\'urgence dans les écoles et des dons en nature pour que plus aucune fille ne manque la classe faute de protection.', 'image' => 'img/terrain-stand.jpg'],
+    ['titre' => 'Porter la voix des filles', 'texte' => 'Un plaidoyer auprès des établissements, des collectivités et des institutions pour faire reconnaître la santé menstruelle comme un droit.', 'image' => 'img/terrain-festival.jpg'],
+    ['titre' => 'Bâtir un changement durable', 'texte' => 'Clubs, mentorat et relais communautaires formés pour que les jeunes filles deviennent elles-mêmes actrices du changement dans leur quartier.', 'image' => 'img/terrain-formation.jpg'],
 ];
 
 $iconesValeurs = ['heart', 'users', 'book', 'check'];
 
 $phases = [
-    ['etape' => 'Court terme', 'titre' => 'Sensibiliser', 'texte' => 'Ateliers, causeries et campagnes pour briser le silence dans les écoles, les familles et les quartiers.', 'image' => 'img/campagne-1.jpg'],
-    ['etape' => 'Moyen terme', 'titre' => 'Équiper', 'texte' => 'Distribution de kits, aménagement d\'espaces dignes et suivi des bénéficiaires pour lever les obstacles concrets.', 'image' => 'img/campagne-2.jpg'],
-    ['etape' => 'Long terme', 'titre' => 'Pérenniser', 'texte' => 'Former des relais, accompagner les clubs et convaincre les institutions pour que le changement dure sans nous.', 'image' => 'img/campagne-3.jpg'],
+    ['etape' => 'Court terme', 'titre' => 'Sensibiliser', 'texte' => 'Ateliers, causeries et campagnes pour briser le silence dans les écoles, les familles et les quartiers.', 'image' => 'img/terrain-cercle.jpg'],
+    ['etape' => 'Moyen terme', 'titre' => 'Équiper', 'texte' => 'Distribution de kits, aménagement d\'espaces dignes et suivi des bénéficiaires pour lever les obstacles concrets.', 'image' => 'img/programme-4.jpg'],
+    ['etape' => 'Long terme', 'titre' => 'Pérenniser', 'texte' => 'Former des relais, accompagner les clubs et convaincre les institutions pour que le changement dure sans nous.', 'image' => 'img/terrain-jeunes.jpg'],
 ];
 
 $vision = [
@@ -229,7 +229,7 @@ $vision = [
         </ul>
       </div>
       <div data-reveal="right">
-        <img class="ab-vision-img" src="<?= e(asset('img/programme-5.jpg')) ?>" alt="Jeunes filles accompagnées par Gouttes Rouges">
+        <img class="ab-vision-img" src="<?= e(asset('img/terrain-groupe.jpg')) ?>" alt="Jeunes accompagnés par Gouttes Rouges">
       </div>
     </div>
   </div>
@@ -261,23 +261,19 @@ $vision = [
 <section class="ab-partners" id="partenaires">
   <div class="container">
     <p class="ab-caps">Ils soutiennent la cause</p>
-    <div class="partners">
-      <?php foreach ($partenaires as $partenaire): ?>
-        <div class="partner-slot"><?= e($partenaire['nom']) ?></div>
-      <?php endforeach; ?>
-    </div>
+    <?= partners_grid($partenaires) ?>
   </div>
 </section>
 
 <section class="ab-cta">
-  <img class="ab-cta-bg" src="<?= e(asset('img/hero-soutenir.jpg')) ?>" alt="">
+  <img class="ab-cta-bg" src="<?= e(asset('img/terrain-camp.jpg')) ?>" alt="">
   <div class="ab-cta-overlay" aria-hidden="true"></div>
   <div class="container ab-cta-inner" data-reveal>
     <h2 class="ab-h2 is-white">Marchons ensemble pour la dignité menstruelle</h2>
     <p>Votre soutien se transforme en kits, en ateliers et en filles qui restent à l'école.</p>
     <div class="ab-cta-actions">
       <a class="btn ab-btn-red" href="<?= e(url('nous-soutenir.php')) ?>#don">Faire un don</a>
-      <a class="btn btn-ghost" href="<?= e(url('nous-soutenir.php')) ?>#partenariat">Devenir partenaire</a>
+      <a class="btn btn-ghost" href="<?= e(url('nous-soutenir.php')) ?>#benevolat">Devenir bénévole</a>
     </div>
   </div>
 </section>

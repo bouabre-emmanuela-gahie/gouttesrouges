@@ -88,7 +88,7 @@ function fallback_campagnes(): array
             'id' => 4,
             'titre' => 'Mois de l\'hygiène menstruelle',
             'slug' => 'mois-hygiene-menstruelle',
-            'image' => 'img/hero-actions.jpg',
+            'image' => 'img/terrain-atelier.jpg',
             'description' => 'Chaque année, un mois d\'actions scolaires, de distributions et de prises de parole pour ancrer la dignité menstruelle dans le débat public.',
             'contenu' => '<p>Le mois de l\'hygiène menstruelle rassemble établissements, partenaires et bénévoles autour d\'ateliers, de kits et de campagnes médias.</p>',
             'date_debut' => '2026-05-01',
@@ -100,11 +100,16 @@ function fallback_campagnes(): array
 function fallback_partenaires(): array
 {
     return [
-        ['nom' => 'Ministère de la Santé', 'logo' => 'img/partner-1.svg', 'site_web' => '#'],
-        ['nom' => 'UNICEF Côte d\'Ivoire', 'logo' => 'img/partner-2.svg', 'site_web' => '#'],
-        ['nom' => 'Fondation Femmes d\'Avenir', 'logo' => 'img/partner-3.svg', 'site_web' => '#'],
-        ['nom' => 'Réseau Écoles Solidaires', 'logo' => 'img/partner-4.svg', 'site_web' => '#'],
-        ['nom' => 'Clinique Espoir Abidjan', 'logo' => 'img/partner-5.svg', 'site_web' => '#'],
+        ['nom' => 'Ministère de la Santé et de l\'Hygiène Publique', 'logo' => 'img/partenaires/ministere-sante.png', 'site_web' => 'https://www.sante.gouv.ci'],
+        ['nom' => 'Equipop', 'logo' => 'img/partenaires/equipop.png', 'site_web' => 'https://equipop.org'],
+        ['nom' => 'EngenderHealth', 'logo' => 'img/partenaires/engenderhealth.png', 'site_web' => 'https://www.engenderhealth.org'],
+        ['nom' => 'Ipas Afrique Francophone', 'logo' => 'img/partenaires/ipas.png', 'site_web' => 'https://www.ipas.org'],
+        ['nom' => 'Solthis', 'logo' => 'img/partenaires/solthis.png', 'site_web' => 'https://www.solthis.org'],
+        ['nom' => 'PNSME', 'logo' => 'img/partenaires/pnsme.png', 'site_web' => ''],
+        ['nom' => 'Perfect', 'logo' => 'img/partenaires/perfect.png', 'site_web' => ''],
+        ['nom' => 'Africa Forward', 'logo' => 'img/partenaires/africa-forward.png', 'site_web' => ''],
+        ['nom' => 'PNSSU-SAJ', 'logo' => 'img/partenaires/pnssu-saj.png', 'site_web' => ''],
+        ['nom' => 'Médecins du Monde', 'logo' => 'img/partenaires/medecins-du-monde.png', 'site_web' => 'https://www.medecinsdumonde.org'],
     ];
 }
 
@@ -152,7 +157,7 @@ function fallback_domaines(): array
         [
             'titre' => 'Éducation menstruelle',
             'texte' => 'Ateliers en milieu scolaire et communautaire pour comprendre le cycle, briser les mythes et adopter les bons gestes d\'hygiène.',
-            'image' => 'img/article-2.jpg',
+            'image' => 'img/terrain-classe.jpg',
         ],
         [
             'titre' => 'Lutte contre la précarité',
@@ -162,22 +167,22 @@ function fallback_domaines(): array
         [
             'titre' => 'Plaidoyer institutionnel',
             'texte' => 'Dialogue avec les établissements, collectivités et autorités pour faire reconnaître la santé menstruelle comme un droit.',
-            'image' => 'img/article-4.jpg',
+            'image' => 'img/terrain-festival.jpg',
         ],
         [
             'titre' => 'Recherche & Analyse',
             'texte' => 'Collecte de données, enquêtes de terrain et publications pour documenter la précarité menstruelle en Côte d\'Ivoire.',
-            'image' => 'img/article-1.jpg',
+            'image' => 'img/terrain-formation.jpg',
         ],
         [
             'titre' => 'Leadership des jeunes filles',
             'texte' => 'Clubs, mentorat et camps pour que les adolescentes prennent la parole, s\'entraident et deviennent des relais dans leurs communautés.',
-            'image' => 'img/programme-5.jpg',
+            'image' => 'img/terrain-jeunes.jpg',
         ],
         [
             'titre' => 'Sensibilisation communautaire',
             'texte' => 'Actions de proximité dans les quartiers et les villages pour ouvrir la parole avec les familles, les relais et les jeunes.',
-            'image' => 'img/campagne-2.jpg',
+            'image' => 'img/terrain-cercle.jpg',
         ],
     ];
 }

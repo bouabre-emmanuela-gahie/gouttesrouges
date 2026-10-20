@@ -31,6 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const restrict = (selector, forbidden) => {
+    document.querySelectorAll(selector).forEach((input) => {
+      input.addEventListener("input", () => {
+        const clean = input.value.replace(forbidden, "");
+        if (clean !== input.value) input.value = clean;
+      });
+    });
+  };
+  restrict("[data-digits]", /\D+/g);
+  restrict("[data-letters]", /[^\p{L}' \-]+/gu);
+
   document.querySelectorAll("[data-continue]").forEach((btn) => {
     btn.addEventListener("click", (event) => {
       const target = document.querySelector(btn.dataset.continue);

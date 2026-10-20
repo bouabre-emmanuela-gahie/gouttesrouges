@@ -23,6 +23,7 @@ $user = admin_user();
       <a class="<?= admin_nav('campagnes.php') ?>" href="<?= e(url('admin/campagnes.php')) ?>">Campagnes</a>
       <a class="<?= admin_nav('dons.php') ?>" href="<?= e(url('admin/dons.php')) ?>">Dons</a>
       <a class="<?= admin_nav('messages.php') ?>" href="<?= e(url('admin/messages.php')) ?>">Messages</a>
+      <a class="<?= admin_nav('demandes.php') ?>" href="<?= e(url('admin/demandes.php')) ?>">Demandes de partenariat</a>
       <a class="<?= admin_nav('partenaires.php') ?>" href="<?= e(url('admin/partenaires.php')) ?>">Partenaires</a>
       <a href="<?= e(url('index.php')) ?>">Voir le site</a>
       <a href="<?= e(url('admin/logout.php')) ?>">Déconnexion</a>

@@ -53,6 +53,16 @@ CREATE TABLE types_dons (
   libelle VARCHAR(80) NOT NULL UNIQUE
 ) ENGINE=InnoDB;
 
+CREATE TABLE utilisateurs (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(80) NOT NULL,
+  prenom VARCHAR(80) NOT NULL,
+  email VARCHAR(160) NOT NULL UNIQUE,
+  telephone VARCHAR(40) DEFAULT NULL,
+  mot_de_passe VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 CREATE TABLE donateurs (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nom VARCHAR(80) NOT NULL,
@@ -220,11 +230,16 @@ INSERT INTO campagnes (titre, slug, image, description, contenu, date_debut, dat
 INSERT INTO types_dons (libelle) VALUES ('financier'), ('materiel');
 
 INSERT INTO partenaires (nom, logo, site_web, description) VALUES
-('Ministère de la Santé', 'img/partner-1.svg', '#', 'Partenaire institutionnel'),
-('UNICEF Côte d''Ivoire', 'img/partner-2.svg', '#', 'Partenaire technique'),
-('Fondation Femmes d''Avenir', 'img/partner-3.svg', '#', 'Mécénat'),
-('Réseau Écoles Solidaires', 'img/partner-4.svg', '#', 'Relais scolaires'),
-('Clinique Espoir Abidjan', 'img/partner-5.svg', '#', 'Santé');
+('Ministère de la Santé et de l''Hygiène Publique', 'img/partenaires/ministere-sante.png', 'https://www.sante.gouv.ci', 'Partenaire institutionnel'),
+('Equipop', 'img/partenaires/equipop.png', 'https://equipop.org', ''),
+('EngenderHealth', 'img/partenaires/engenderhealth.png', 'https://www.engenderhealth.org', ''),
+('Ipas Afrique Francophone', 'img/partenaires/ipas.png', 'https://www.ipas.org', ''),
+('Solthis', 'img/partenaires/solthis.png', 'https://www.solthis.org', ''),
+('PNSME', 'img/partenaires/pnsme.png', '', 'Programme National de Santé de la Mère et de l''Enfant'),
+('Perfect', 'img/partenaires/perfect.png', '', ''),
+('Africa Forward', 'img/partenaires/africa-forward.png', '', ''),
+('PNSSU-SAJ', 'img/partenaires/pnssu-saj.png', '', 'Programme National de Santé Scolaire et Universitaire'),
+('Médecins du Monde', 'img/partenaires/medecins-du-monde.png', 'https://www.medecinsdumonde.org', '');
 
 INSERT INTO equipe (nom, fonction, bio, photo, ordre) VALUES
 ('Aminata Koné', 'Fondatrice & Présidente', 'Militante de la santé menstruelle.', 'img/team-1.jpg', 1),

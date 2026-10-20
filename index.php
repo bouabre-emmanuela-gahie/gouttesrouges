@@ -8,6 +8,7 @@ $articles = get_articles(3);
 $chiffres = get_chiffres();
 $programmes = array_slice(get_programmes(), 0, 3);
 $campagnes = get_campagnes();
+$partenaires = get_partenaires();
 $slides = [
     [
         'image' => 'img/hero-accueil.jpg',
@@ -16,13 +17,13 @@ $slides = [
         'text' => 'Contre la précarité menstruelle, pour l\'éducation et la dignité des filles et des femmes.',
     ],
     [
-        'image' => 'img/hero-actions.jpg',
+        'image' => 'img/terrain-camp.jpg',
         'label' => 'Un droit, pas un luxe',
         'title' => 'La dignité menstruelle pour toutes.',
         'text' => 'Nous éduquons, distribuons des kits et ouvrons la parole pour qu\'aucune fille ne manque l\'école.',
     ],
     [
-        'image' => 'img/hero-soutenir.jpg',
+        'image' => 'img/terrain-groupe.jpg',
         'label' => 'Partout en Côte d\'Ivoire',
         'title' => 'Agir ensemble, d\'Abidjan à l\'intérieur.',
         'text' => 'Clubs, campagnes et plaidoyer pour une vie menstruelle libre, informée et digne.',
@@ -112,11 +113,11 @@ $premierSuffix = str_replace($premierRaw, '', $premierChiffre['valeur']);
   <div class="container ab-container-lg">
     <div class="hm-story-images">
       <div class="hm-story-img" data-reveal="left">
-        <img src="<?= e(asset('img/histoire.jpg')) ?>" alt="Mains unies peintes en rouge">
+        <img src="<?= e(asset('img/terrain-cercle.jpg')) ?>" alt="Discussion en cercle lors d'un Camp Rouge">
         <svg class="hm-story-icon is-bottom" viewBox="0 0 28 36" aria-hidden="true"><path d="M14 1.5C14 1.5 2.5 14.2 2.5 22.2a11.5 11.5 0 1 0 23 0C25.5 14.2 14 1.5 14 1.5z" fill="#fff"/></svg>
       </div>
       <div class="hm-story-img" data-reveal="right">
-        <img src="<?= e(asset('img/programme-1.jpg')) ?>" alt="Atelier avec des jeunes filles">
+        <img src="<?= e(asset('img/terrain-classe.jpg')) ?>" alt="Intervention de Gouttes Rouges dans une salle de classe">
         <span class="hm-story-icon is-top"><?= icon_svg('heart') ?></span>
       </div>
     </div>
@@ -257,8 +258,8 @@ $premierSuffix = str_replace($premierRaw, '', $premierChiffre['valeur']);
   <div class="container">
     <div class="hm-future-grid">
       <div class="hm-future-left" data-reveal="left">
-        <img class="hm-future-img" src="<?= e(asset('img/programme-4.jpg')) ?>" alt="Jeune fille accompagnée par Gouttes Rouges">
-        <img class="hm-future-circle" src="<?= e(asset('img/programme-5.jpg')) ?>" alt="">
+        <img class="hm-future-img" src="<?= e(asset('img/terrain-jeunes.jpg')) ?>" alt="Jeunes ambassadeurs Gouttes Rouges prenant la parole">
+        <img class="hm-future-circle" src="<?= e(asset('img/terrain-sororite.jpg')) ?>" alt="">
       </div>
       <div data-reveal="right">
         <p class="ab-caps">Participez à leur avenir</p>
@@ -267,6 +268,13 @@ $premierSuffix = str_replace($premierRaw, '', $premierChiffre['valeur']);
         <a class="hm-btn is-dark" href="<?= e(url('nous-soutenir.php')) ?>#benevolat">Devenir bénévole</a>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="ab-partners hm-partners">
+  <div class="container" data-reveal>
+    <p class="ab-caps">Ils soutiennent la cause</p>
+    <?= partners_grid($partenaires) ?>
   </div>
 </section>
 

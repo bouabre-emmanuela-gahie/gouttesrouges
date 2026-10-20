@@ -21,9 +21,9 @@ require __DIR__ . '/includes/header.php';
     <form class="card" method="post" action="<?= e(url('traitements/contact.php')) ?>">
       <?= csrf_field() ?>
       <h2>Formulaire de contact</h2>
-      <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required></div>
+      <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required <?= name_attrs() ?>></div>
       <div class="field"><label for="email">Email</label><input id="email" type="email" name="email" required></div>
-      <div class="field"><label for="telephone">Téléphone</label><input id="telephone" name="telephone"></div>
+      <?= phone_field('telephone', 'Téléphone (facultatif)', false) ?>
       <div class="field">
         <label for="objet">Objet</label>
         <select id="objet" name="objet" required>
@@ -31,10 +31,12 @@ require __DIR__ . '/includes/header.php';
           <option>Demande d'information</option>
           <option>Intervention en établissement</option>
           <option>Don / soutien</option>
+          <option><?= e(CONTACT_OBJET_PARTENARIAT) ?></option>
           <option>Presse</option>
           <option>Autre</option>
         </select>
       </div>
+      <div class="field"><label for="organisation">Organisation (facultatif)</label><input id="organisation" name="organisation" maxlength="160"></div>
       <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
       <button class="btn btn-dark" type="submit">Envoyer</button>
     </form>
@@ -52,10 +54,7 @@ require __DIR__ . '/includes/header.php';
       <div id="reseaux" style="margin-top:18px">
         <h3>Réseaux sociaux</h3>
         <div class="socials">
-          <a href="https://facebook.com" target="_blank" rel="noopener">f</a>
-          <a href="https://x.com" target="_blank" rel="noopener">x</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener">ig</a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener">in</a>
+          <?= social_links() ?>
         </div>
       </div>
       <p id="rejoindre" style="margin-top:18px"><a class="btn btn-dark" href="<?= e(url('nous-soutenir.php')) ?>#benevolat">Nous rejoindre</a></p>

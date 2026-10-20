@@ -24,7 +24,13 @@ Site de l'association **Gouttes Rouges** (Côte d'Ivoire), réalisé selon le ca
 - Email : `admin@gouttesrouges.org`
 - Mot de passe : `GouttesRouges2026!`
 
-L'espace admin permet de gérer les articles, campagnes, dons, messages et partenaires.
+L'espace admin permet d'ajouter, modifier et supprimer des articles (avec envoi d'image), de lire et traiter les messages, de suivre les demandes de partenariat (envoyées depuis le formulaire de contact, objet « Proposition de partenariat »), les dons, les campagnes et les logos des partenaires.
+
+## Comptes donateurs
+
+Les visiteurs créent un compte (`inscription.php`) puis se connectent (`connexion.php`) pour faire un don. L'historique des dons est visible dans `mon-compte.php`.
+
+Sur une base existante, exécuter une fois `sql/migration-2026-10.sql` (table `utilisateurs` + logos « Ils soutiennent la cause »).
 
 ## Pages publiques
 

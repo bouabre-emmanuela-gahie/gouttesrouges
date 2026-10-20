@@ -1,12 +1,18 @@
 <?php
 require_once __DIR__ . '/includes/icons.php';
 $pageTitle = 'Nous soutenir — Gouttes Rouges';
-$pageDescription = 'Faire un don financier ou matériel, devenir bénévole ou partenaire de Gouttes Rouges.';
+$pageDescription = 'Faire un don financier ou matériel ou devenir bénévole pour Gouttes Rouges.';
 require __DIR__ . '/includes/header.php';
 
 $campagnes = get_campagnes();
 $partenaires = get_partenaires();
 $temoignages = get_temoignages();
+$donateur = current_user();
+$produits = don_produits();
+$retourDon = urlencode('nous-soutenir.php#don');
+$loginBox = '<div class="donate-login"><p>Connectez-vous à votre compte pour faire un don et suivre vos contributions.</p>'
+    . '<div class="hero-actions"><a class="btn btn-dark" href="' . e(url('connexion.php?redirect=' . $retourDon)) . '">Se connecter</a>'
+    . '<a class="btn btn-light" href="' . e(url('inscription.php?redirect=' . $retourDon)) . '">Créer un compte</a></div></div>';
 ?>
 
 <section class="hero">
@@ -20,7 +26,7 @@ $temoignages = get_temoignages();
       </div>
     </div>
     <div class="media-frame">
-      <img src="<?= e(asset('img/hero-soutenir.jpg')) ?>" alt="Collecte de dons pour Gouttes Rouges">
+      <img src="<?= e(asset('img/terrain-stand.jpg')) ?>" alt="Stand de distribution de protections Gouttes Rouges">
     </div>
   </div>
 </section>
@@ -43,9 +49,9 @@ $temoignages = get_temoignages();
         <a class="btn btn-dark" href="#don-materiel">Je donne</a>
       </article>
       <article class="card">
-        <h3>Devenir partenaire</h3>
-        <p>Écoles, entreprises et associations : construisons ensemble des actions durables sur le territoire.</p>
-        <a class="btn btn-light" href="#partenariat">Nous contacter</a>
+        <h3>Donner du temps</h3>
+        <p>Ateliers, distributions, logistique ou communication : rejoignez nos bénévoles sur le terrain.</p>
+        <a class="btn btn-light" href="#benevolat">Devenir bénévole</a>
       </article>
     </div>
   </div>
@@ -73,30 +79,16 @@ $temoignages = get_temoignages();
           <label for="montant_libre">Autre montant</label>
           <input type="number" min="100" step="100" name="montant_libre" id="montant_libre" placeholder="Autre montant (XOF)">
         </div>
-        <div class="donate-more" id="don-financier-plus">
-          <div class="grid-2">
-            <div class="field"><label for="fin_nom">Nom</label><input id="fin_nom" name="nom" required></div>
-            <div class="field"><label for="fin_prenom">Prénom</label><input id="fin_prenom" name="prenom" required></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="fin_email">Email</label><input id="fin_email" type="email" name="email" required></div>
-            <div class="field"><label for="fin_tel">Téléphone</label><input id="fin_tel" name="telephone" required></div>
-          </div>
-          <div class="field">
-            <label for="fin_campagne">Campagne concernée</label>
-            <select id="fin_campagne" name="campagne_id">
-              <option value="">Don général</option>
-              <?php foreach ($campagnes as $campagne): ?>
-                <option value="<?= e((string) $campagne['id']) ?>"><?= e($campagne['titre']) ?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
+        <?php if ($donateur): ?>
+          <p class="donate-user">Don au nom de <strong><?= e($donateur['prenom'] . ' ' . $donateur['nom']) ?></strong> (<?= e($donateur['email']) ?>)</p>
           <div class="field">
             <label for="fin_message">Message</label>
-            <textarea id="fin_message" name="message" placeholder="Un mot pour l'équipe"></textarea>
+            <textarea id="fin_message" name="message" maxlength="1000" placeholder="Un mot pour l'équipe"></textarea>
           </div>
-        </div>
-        <button class="btn btn-dark" type="button" data-continue="#don-financier-plus" data-label="Valider le don" style="width:100%">Continuer</button>
+          <button class="btn btn-dark" type="submit" style="width:100%">Valider le don</button>
+        <?php else: ?>
+          <?= $loginBox ?>
+        <?php endif; ?>
       </form>
 
       <form class="card donate-card" id="don-materiel" method="post" action="<?= e(url('traitements/don.php')) ?>">
@@ -107,26 +99,17 @@ $temoignages = get_temoignages();
           <label for="materiel">Choisir un produit</label>
           <select id="materiel" name="materiel" required>
             <option value="">Choisir un produit</option>
-            <option>Serviettes hygiéniques</option>
-            <option>Culottes menstruelles</option>
-            <option>Tampons</option>
-            <option>Savon et produits d'hygiène</option>
-            <option>Sous-vêtements neufs</option>
+            <?php foreach ($produits as $produit): ?>
+              <option><?= e($produit) ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
         <div class="field">
           <label for="quantite">Quantité</label>
-          <input id="quantite" type="number" min="1" name="quantite" value="1" required>
+          <input id="quantite" type="number" min="1" max="100000" name="quantite" value="1" required>
         </div>
-        <div class="donate-more" id="don-materiel-plus">
-          <div class="grid-2">
-            <div class="field"><label for="mat_nom">Nom</label><input id="mat_nom" name="nom" required></div>
-            <div class="field"><label for="mat_prenom">Prénom</label><input id="mat_prenom" name="prenom" required></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="mat_email">Email</label><input id="mat_email" type="email" name="email" required></div>
-            <div class="field"><label for="mat_tel">Téléphone</label><input id="mat_tel" name="telephone" required></div>
-          </div>
+        <?php if ($donateur): ?>
+          <p class="donate-user">Don au nom de <strong><?= e($donateur['prenom'] . ' ' . $donateur['nom']) ?></strong> (<?= e($donateur['email']) ?>)</p>
           <div class="field">
             <label for="mat_campagne">Campagne concernée</label>
             <select id="mat_campagne" name="campagne_id">
@@ -138,14 +121,16 @@ $temoignages = get_temoignages();
           </div>
           <div class="field">
             <label for="mat_message">Message</label>
-            <textarea id="mat_message" name="message" placeholder="Précisez le lieu de dépôt si besoin"></textarea>
+            <textarea id="mat_message" name="message" maxlength="1000" placeholder="Précisez le lieu de dépôt si besoin"></textarea>
           </div>
-        </div>
-        <button class="btn btn-light" type="button" data-continue="#don-materiel-plus" data-label="Je confirme le don" style="width:100%">Je fais un don</button>
+          <button class="btn btn-light" type="submit" style="width:100%">Je confirme le don</button>
+        <?php else: ?>
+          <?= $loginBox ?>
+        <?php endif; ?>
       </form>
       </div>
       <aside class="donate-visual">
-        <img src="<?= e(asset('img/hero-soutenir.jpg')) ?>" alt="Soutenir les bénéficiaires">
+        <img src="<?= e(asset('img/terrain-groupe.jpg')) ?>" alt="Jeunes réunis par Gouttes Rouges">
         <div class="caption">
           <h3>Aidez des filles comme Awa à rester à l'école.</h3>
           <p>Votre don finance des kits, des ateliers et un suivi digne, à Abidjan comme à l'intérieur.</p>
@@ -202,15 +187,15 @@ $temoignages = get_temoignages();
     <form class="card" method="post" action="<?= e(url('traitements/benevole.php')) ?>" style="max-width:820px;margin:0 auto">
       <?= csrf_field() ?>
       <div class="grid-2">
-        <div class="field"><label for="ben_nom">Nom</label><input id="ben_nom" name="nom" required></div>
-        <div class="field"><label for="ben_prenom">Prénom</label><input id="ben_prenom" name="prenom" required></div>
+        <div class="field"><label for="ben_nom">Nom</label><input id="ben_nom" name="nom" required <?= name_attrs() ?>></div>
+        <div class="field"><label for="ben_prenom">Prénom</label><input id="ben_prenom" name="prenom" required <?= name_attrs() ?>></div>
       </div>
       <div class="grid-2">
         <div class="field"><label for="ben_email">Email</label><input id="ben_email" type="email" name="email" required></div>
-        <div class="field"><label for="ben_tel">Téléphone</label><input id="ben_tel" name="telephone" required></div>
+        <?= phone_field('ben_tel') ?>
       </div>
       <div class="grid-2">
-        <div class="field"><label for="ben_ville">Ville</label><input id="ben_ville" name="ville" required></div>
+        <div class="field"><label for="ben_ville">Ville</label><input id="ben_ville" name="ville" required <?= name_attrs() ?>></div>
         <div class="field">
           <label for="ben_domaine">Domaine d'intérêt</label>
           <select id="ben_domaine" name="domaine_interet" required>
@@ -229,47 +214,10 @@ $temoignages = get_temoignages();
   </div>
 </section>
 
-<section class="section section-alt" id="partenariat">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">Devenir partenaire</h2>
-      <p class="lead">Établissements, entreprises et associations : proposons un partenariat utile aux filles.</p>
-    </div>
-    <form class="card" method="post" action="<?= e(url('traitements/partenariat.php')) ?>" style="max-width:820px;margin:0 auto">
-      <?= csrf_field() ?>
-      <div class="grid-2">
-        <div class="field"><label for="org">Organisation</label><input id="org" name="organisation" required></div>
-        <div class="field"><label for="resp">Responsable</label><input id="resp" name="responsable" required></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label for="par_email">Email</label><input id="par_email" type="email" name="email" required></div>
-        <div class="field"><label for="par_tel">Téléphone</label><input id="par_tel" name="telephone" required></div>
-      </div>
-      <div class="field">
-        <label for="type_p">Type de partenariat</label>
-        <select id="type_p" name="type_partenariat" required>
-          <option value="">Choisir</option>
-          <option>Financier</option>
-          <option>Matériel</option>
-          <option>Technique / expertise</option>
-          <option>Scolaire</option>
-          <option>Médias</option>
-        </select>
-      </div>
-      <div class="field"><label for="par_msg">Message</label><textarea id="par_msg" name="message" required></textarea></div>
-      <button class="btn btn-dark" type="submit">Envoyer la demande</button>
-    </form>
-  </div>
-</section>
-
 <section class="section">
   <div class="container">
     <p class="kicker">Ils soutiennent la cause</p>
-    <div class="partners">
-      <?php foreach ($partenaires as $partenaire): ?>
-        <div class="partner-slot"><?= e($partenaire['nom']) ?></div>
-      <?php endforeach; ?>
-    </div>
+    <?= partners_grid($partenaires) ?>
   </div>
 </section>
 

@@ -8,31 +8,46 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !csrf_ok()) {
     redirect('nous-soutenir.php#don');
 }
 
-$type = $_POST['type_don'] ?? 'financier';
-$nom = trim($_POST['nom'] ?? '');
-$prenom = trim($_POST['prenom'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$telephone = trim($_POST['telephone'] ?? '');
-$message = trim($_POST['message'] ?? '');
-$campagneId = $_POST['campagne_id'] !== '' ? (int) $_POST['campagne_id'] : null;
-$montant = (int) ($_POST['montant_libre'] ?: ($_POST['montant'] ?? 0));
-$materiel = trim($_POST['materiel'] ?? '');
-$quantite = (int) ($_POST['quantite'] ?? 0);
+$user = current_user();
+if (!$user) {
+    flash_set('error', 'Connectez-vous pour faire un don.');
+    redirect('connexion.php?redirect=' . urlencode('nous-soutenir.php#don'));
+}
 
-if ($nom === '' || $prenom === '' || $email === '' || $telephone === '') {
-    flash_set('error', 'Merci de renseigner votre identité et vos coordonnées.');
-    redirect('nous-soutenir.php#don');
+$type = ($_POST['type_don'] ?? '') === 'materiel' ? 'materiel' : 'financier';
+$message = mb_substr(trim($_POST['message'] ?? ''), 0, 1000);
+$montant = null;
+$materiel = null;
+$quantite = null;
+$campagneId = null;
+
+if ($type === 'financier') {
+    $saisie = trim((string) ($_POST['montant_libre'] ?? ''));
+    $saisie = $saisie !== '' ? $saisie : trim((string) ($_POST['montant'] ?? ''));
+    if (!preg_match('/^\d{3,9}$/', $saisie) || (int) $saisie < 100) {
+        flash_set('error', 'Le montant doit être un nombre d\'au moins 100 XOF.');
+        redirect('nous-soutenir.php#don');
+    }
+    $montant = (int) $saisie;
+} else {
+    $materiel = trim($_POST['materiel'] ?? '');
+    $quantite = (int) ($_POST['quantite'] ?? 0);
+    if (!in_array($materiel, don_produits(), true) || $quantite < 1 || $quantite > 100000) {
+        flash_set('error', 'Merci de choisir un produit et une quantité valide.');
+        redirect('nous-soutenir.php#don-materiel');
+    }
+    $campagneId = ($_POST['campagne_id'] ?? '') !== '' ? (int) $_POST['campagne_id'] : null;
 }
 
 $row = [
-    'nom' => $nom,
-    'prenom' => $prenom,
-    'email' => $email,
-    'telephone' => $telephone,
+    'nom' => $user['nom'],
+    'prenom' => $user['prenom'],
+    'email' => $user['email'],
+    'telephone' => $user['telephone'],
     'type_don' => $type,
-    'montant' => $type === 'financier' ? $montant : null,
-    'materiel' => $type === 'materiel' ? $materiel : null,
-    'quantite' => $type === 'materiel' ? $quantite : null,
+    'montant' => $montant,
+    'materiel' => $materiel,
+    'quantite' => $quantite,
     'campagne_id' => $campagneId,
     'message' => $message,
 ];
@@ -40,9 +55,14 @@ $row = [
 $db = pdo();
 if ($db) {
     $db->beginTransaction();
-    $stmt = $db->prepare('INSERT INTO donateurs (nom, prenom, email, telephone) VALUES (?, ?, ?, ?)');
-    $stmt->execute([$nom, $prenom, $email, $telephone]);
-    $donateurId = (int) $db->lastInsertId();
+    $existant = $db->prepare('SELECT id FROM donateurs WHERE email = ? ORDER BY id DESC LIMIT 1');
+    $existant->execute([$user['email']]);
+    $donateurId = (int) ($existant->fetchColumn() ?: 0);
+    if (!$donateurId) {
+        $db->prepare('INSERT INTO donateurs (nom, prenom, email, telephone) VALUES (?, ?, ?, ?)')
+            ->execute([$user['nom'], $user['prenom'], $user['email'], $user['telephone']]);
+        $donateurId = (int) $db->lastInsertId();
+    }
 
     $typeRow = $db->prepare('SELECT id FROM types_dons WHERE libelle = ?');
     $typeRow->execute([$type]);
@@ -55,20 +75,11 @@ if ($db) {
     $db->prepare(
         'INSERT INTO dons (donateur_id, type_don_id, montant, quantite, materiel, campagne_id, message, statut)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-    )->execute([
-        $donateurId,
-        $typeId,
-        $row['montant'],
-        $row['quantite'],
-        $row['materiel'],
-        $campagneId,
-        $message,
-        'en_attente',
-    ]);
+    )->execute([$donateurId, $typeId, $montant, $quantite, $materiel, $campagneId, $message, 'en_attente']);
     $db->commit();
 } else {
     save_json('dons.json', $row);
 }
 
-flash_set('success', 'Merci. Votre don a bien été enregistré. L\'équipe vous recontactera si besoin.');
-redirect('nous-soutenir.php#don');
+flash_set('success', 'Merci ' . $user['prenom'] . ' ! Votre don a bien été enregistré. Retrouvez-le dans « Mon compte ».');
+redirect('mon-compte.php');

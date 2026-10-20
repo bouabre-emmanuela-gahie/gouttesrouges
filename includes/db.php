@@ -66,7 +66,7 @@ function db_count(string $table): int
     }
     $allowed = [
         'articles', 'campagnes', 'dons', 'messages', 'partenaires',
-        'demandes_partenariat', 'visiteurs', 'newsletter', 'donateurs',
+        'demandes_partenariat', 'visiteurs', 'newsletter', 'donateurs', 'utilisateurs',
     ];
     if (!in_array($table, $allowed, true)) {
         return 0;

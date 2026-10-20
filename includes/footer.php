@@ -20,10 +20,7 @@
       </a>
       <p><?= e(SITE_TAGLINE) ?> Association engagée à Abidjan et dans les villes de l'intérieur.</p>
       <div class="socials" style="margin-top:16px">
-        <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg></a>
-        <a href="https://x.com" aria-label="X" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14.7 10.3 21 3h-2.3l-5.1 5.9L9.3 3H3l6.7 9.7L3 21h2.3l5.5-6.4L14.7 21H21l-6.3-10.7z"/></svg></a>
-        <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-5 3.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5zm4.8-.9a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg></a>
-        <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 9H4V20h2.5V9zM5.2 4A1.6 1.6 0 1 0 5.2 7.2 1.6 1.6 0 0 0 5.2 4zM20 20h-2.5v-5.6c0-1.8-.8-2.4-1.8-2.4s-2 .9-2 2.5V20H11V9h2.4v1.5c.6-1 1.7-1.8 3.3-1.8 2.2 0 3.3 1.4 3.3 4.2V20z"/></svg></a>
+        <?= social_links() ?>
       </div>
     </div>
     <div class="footer-col">
@@ -53,7 +50,6 @@
       <h4>Nous soutenir</h4>
       <a href="<?= e(url('nous-soutenir.php')) ?>#don">Faire un don</a>
       <a href="<?= e(url('nous-soutenir.php')) ?>#benevolat">Devenir bénévole</a>
-      <a href="<?= e(url('nous-soutenir.php')) ?>#partenariat">Devenir partenaire</a>
       <a href="<?= e(url('nous-soutenir.php')) ?>#benevolat">Donner du temps</a>
     </div>
     <div class="footer-col">

@@ -3,37 +3,77 @@ require_once __DIR__ . '/includes/auth.php';
 require_admin();
 $db = pdo();
 
-if ($db && isset($_GET['statut'], $_GET['id'])) {
-    $db->prepare('UPDATE messages SET statut = ? WHERE id = ?')->execute([$_GET['statut'], (int) $_GET['id']]);
-    header('Location: ' . url('admin/messages.php'));
+$statuts = ['nouveau' => 'Nouveau', 'traite' => 'Traité', 'archive' => 'Archivé'];
+
+if ($db && $_SERVER['REQUEST_METHOD'] === 'POST' && csrf_ok()) {
+    $id = (int) ($_POST['id'] ?? 0);
+    $action = $_POST['action'] ?? '';
+    if ($action === 'delete') {
+        $db->prepare('DELETE FROM messages WHERE id = ?')->execute([$id]);
+        flash_set('success', 'Message supprimé.');
+    } elseif (isset($statuts[$action])) {
+        $db->prepare('UPDATE messages SET statut = ? WHERE id = ?')->execute([$action, $id]);
+    }
+    header('Location: ' . url('admin/messages.php' . (isset($_GET['statut']) ? '?statut=' . urlencode((string) $_GET['statut']) : '')));
     exit;
 }
 
-$messages = $db ? db_all('SELECT * FROM messages ORDER BY created_at DESC') : [];
+$filtre = isset($statuts[$_GET['statut'] ?? '']) ? $_GET['statut'] : null;
+$messages = $db ? db_all(
+    'SELECT * FROM messages' . ($filtre ? ' WHERE statut = ?' : '') . ' ORDER BY created_at DESC',
+    $filtre ? [$filtre] : []
+) : [];
+$flash = flash_get();
 $adminTitle = 'Messages';
 require __DIR__ . '/includes/header.php';
 ?>
-<p>Consulter, traiter et archiver les messages du formulaire de contact.</p>
-<table class="data">
-  <thead><tr><th>Nom</th><th>Objet</th><th>Message</th><th>Statut</th><th></th></tr></thead>
-  <tbody>
+<?php if ($flash): ?><div class="flash flash-<?= e($flash['type']) ?>"><?= e($flash['message']) ?></div><?php endif; ?>
+<p>Messages reçus via le formulaire de contact. Cliquez sur un message pour le lire en entier.</p>
+<div class="admin-filters">
+  <a class="<?= $filtre === null ? 'is-active' : '' ?>" href="<?= e(url('admin/messages.php')) ?>">Tous</a>
+  <?php foreach ($statuts as $code => $libelle): ?>
+    <a class="<?= $filtre === $code ? 'is-active' : '' ?>" href="?statut=<?= e($code) ?>"><?= e($libelle) ?></a>
+  <?php endforeach; ?>
+</div>
+<div class="admin-list">
   <?php foreach ($messages as $msg): ?>
-    <tr>
-      <td><?= e($msg['nom']) ?><br><small><?= e($msg['email']) ?></small></td>
-      <td><?= e($msg['objet']) ?></td>
-      <td><?= e(excerpt($msg['message'], 80)) ?></td>
-      <td><?= e($msg['statut']) ?></td>
-      <td>
+    <details class="admin-item<?= $msg['statut'] === 'nouveau' ? ' is-new' : '' ?>">
+      <summary>
+        <span class="admin-item-main">
+          <strong><?= e($msg['nom']) ?></strong> — <?= e($msg['objet']) ?>
+          <small><?= e(excerpt($msg['message'], 90)) ?></small>
+        </span>
+        <span class="admin-badge is-<?= e($msg['statut']) ?>"><?= e($statuts[$msg['statut']] ?? $msg['statut']) ?></span>
+        <span class="admin-date"><?= e(format_date($msg['created_at'])) ?></span>
+      </summary>
+      <div class="admin-item-body">
+        <p class="admin-meta">
+          <a href="mailto:<?= e($msg['email']) ?>?subject=<?= e(rawurlencode('Re: ' . $msg['objet'])) ?>"><?= e($msg['email']) ?></a>
+          <?php if (!empty($msg['telephone'])): ?> · <a href="tel:<?= e(str_replace(' ', '', $msg['telephone'])) ?>"><?= e($msg['telephone']) ?></a><?php endif; ?>
+        </p>
+        <div class="admin-message"><?= nl2br(e($msg['message'])) ?></div>
         <div class="admin-actions">
-          <a class="btn btn-success" href="?id=<?= (int) $msg['id'] ?>&statut=traite">Traiter</a>
-          <a class="btn btn-neutral" href="?id=<?= (int) $msg['id'] ?>&statut=archive">Archiver</a>
+          <a class="btn btn-dark" href="mailto:<?= e($msg['email']) ?>?subject=<?= e(rawurlencode('Re: ' . $msg['objet'])) ?>">Répondre</a>
+          <?php foreach (['traite' => ['Marquer traité', 'btn-success'], 'archive' => ['Archiver', 'btn-neutral']] as $code => [$label, $class]): ?>
+            <?php if ($msg['statut'] !== $code): ?>
+              <form method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="id" value="<?= (int) $msg['id'] ?>">
+                <button class="btn <?= $class ?>" name="action" value="<?= $code ?>" type="submit"><?= $label ?></button>
+              </form>
+            <?php endif; ?>
+          <?php endforeach; ?>
+          <form method="post" onsubmit="return confirm('Supprimer ce message ?')">
+            <?= csrf_field() ?>
+            <input type="hidden" name="id" value="<?= (int) $msg['id'] ?>">
+            <button class="btn btn-danger" name="action" value="delete" type="submit">Supprimer</button>
+          </form>
         </div>
-      </td>
-    </tr>
+      </div>
+    </details>
   <?php endforeach; ?>
   <?php if (!$messages): ?>
-    <tr><td colspan="5">Aucun message.</td></tr>
+    <p class="admin-empty">Aucun message<?= $filtre ? ' avec ce statut' : '' ?>.</p>
   <?php endif; ?>
-  </tbody>
-</table>
+</div>
 <?php require __DIR__ . '/includes/footer.php'; ?>
