@@ -336,3 +336,34 @@ function don_produits(): array
 {
     return ['Serviettes hygiéniques', 'Culottes menstruelles', 'Tampons', 'Savon et produits d\'hygiène', 'Sous-vêtements neufs'];
 }
+
+/* —— Paiement des dons financiers (mode démonstration) —— */
+
+function paiement_moyens(): array
+{
+    return [
+        'orange' => 'Orange Money',
+        'mtn' => 'MTN Mobile Money',
+        'moov' => 'Moov Money',
+        'wave' => 'Wave',
+        'carte' => 'Carte bancaire',
+    ];
+}
+
+/** Don financier appartenant à l'utilisateur connecté, ou null. */
+function don_du_donateur(int $donId, array $user): ?array
+{
+    return db_one(
+        "SELECT d.*, t.libelle AS type_don
+         FROM dons d
+         JOIN donateurs don ON don.id = d.donateur_id
+         JOIN types_dons t ON t.id = d.type_don_id
+         WHERE d.id = ? AND don.email = ? AND t.libelle = 'financier'",
+        [$donId, $user['email']]
+    );
+}
+
+function paiement_reference(array $don): string
+{
+    return 'GR-' . date('Ymd', strtotime((string) $don['created_at']) ?: time()) . '-' . str_pad((string) $don['id'], 5, '0', STR_PAD_LEFT);
+}

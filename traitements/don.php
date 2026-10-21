@@ -76,7 +76,11 @@ if ($db) {
         'INSERT INTO dons (donateur_id, type_don_id, montant, quantite, materiel, campagne_id, message, statut)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     )->execute([$donateurId, $typeId, $montant, $quantite, $materiel, $campagneId, $message, 'en_attente']);
+    $donId = (int) $db->lastInsertId();
     $db->commit();
+    if ($type === 'financier') {
+        redirect('paiement.php?don=' . $donId);
+    }
 } else {
     save_json('dons.json', $row);
 }

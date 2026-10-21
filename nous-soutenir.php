@@ -85,7 +85,7 @@ $loginBox = '<div class="donate-login"><p>Connectez-vous à votre compte pour fa
             <label for="fin_message">Message</label>
             <textarea id="fin_message" name="message" maxlength="1000" placeholder="Un mot pour l'équipe"></textarea>
           </div>
-          <button class="btn btn-dark" type="submit" style="width:100%">Valider le don</button>
+          <button class="btn btn-dark" type="submit" style="width:100%">Payer</button>
         <?php else: ?>
           <?= $loginBox ?>
         <?php endif; ?>

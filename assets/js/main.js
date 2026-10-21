@@ -42,6 +42,43 @@ document.addEventListener("DOMContentLoaded", () => {
   restrict("[data-digits]", /\D+/g);
   restrict("[data-letters]", /[^\p{L}' \-]+/gu);
 
+  document.querySelectorAll("[data-pay-redirect]").forEach((overlay) => {
+    document.body.classList.add("is-paying");
+    setTimeout(() => {
+      overlay.classList.add("is-done");
+      document.body.classList.remove("is-paying");
+    }, 1800);
+  });
+
+  const payForm = document.querySelector("[data-pay-form]");
+  if (payForm) {
+    const panels = payForm.querySelectorAll("[data-pay-panel]");
+    const sync = () => {
+      const method = payForm.querySelector("[data-pay-method]:checked")?.value;
+      const active = method === "carte" ? "carte" : "mobile";
+      panels.forEach((panel) => {
+        const on = panel.dataset.payPanel === active;
+        panel.hidden = !on;
+        panel.querySelectorAll("input").forEach((input) => { input.required = on; });
+      });
+    };
+    payForm.querySelectorAll("[data-pay-method]").forEach((radio) => radio.addEventListener("change", sync));
+    sync();
+    const card = payForm.querySelector("#carte_numero");
+    card?.addEventListener("input", () => {
+      card.value = card.value.replace(/\D+/g, "").slice(0, 16).replace(/(\d{4})(?=\d)/g, "$1 ");
+    });
+    const exp = payForm.querySelector("#carte_expiration");
+    exp?.addEventListener("input", () => {
+      const d = exp.value.replace(/\D+/g, "").slice(0, 4);
+      exp.value = d.length > 2 ? d.slice(0, 2) + "/" + d.slice(2) : d;
+    });
+    payForm.addEventListener("submit", () => {
+      const btn = payForm.querySelector(".pay-submit");
+      if (btn) { btn.disabled = true; btn.textContent = "Paiement en cours…"; }
+    });
+  }
+
   document.querySelectorAll("[data-continue]").forEach((btn) => {
     btn.addEventListener("click", (event) => {
       const target = document.querySelector(btn.dataset.continue);

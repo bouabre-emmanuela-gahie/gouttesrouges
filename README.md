@@ -30,6 +30,8 @@ L'espace admin permet d'ajouter, modifier et supprimer des articles (avec envoi 
 
 Les visiteurs créent un compte (`inscription.php`) puis se connectent (`connexion.php`) pour faire un don. L'historique des dons est visible dans `mon-compte.php`.
 
+Un don financier passe ensuite par la page de paiement (`paiement.php` : Orange Money, MTN, Moov, Wave ou carte bancaire), puis par la confirmation « Paiement effectué » (`paiement-effectue.php`), et le don passe au statut « reçu ». Ce paiement est en **mode démonstration** : aucun débit réel. Pour encaisser de vrais dons, brancher un prestataire (CinetPay, PayDunya…) à la place de la validation de `paiement.php`.
+
 Sur une base existante, exécuter une fois `sql/migration-2026-10.sql` (table `utilisateurs` + logos « Ils soutiennent la cause »).
 
 ## Pages publiques

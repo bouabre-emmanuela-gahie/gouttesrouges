@@ -38,14 +38,21 @@ require __DIR__ . '/includes/header.php';
     <?php if ($dons): ?>
       <div class="table-scroll">
         <table class="data">
-          <thead><tr><th>Date</th><th>Type</th><th>Montant / matériel</th><th>Statut</th></tr></thead>
+          <thead><tr><th>Date</th><th>Type</th><th>Montant / matériel</th><th>Statut</th><th></th></tr></thead>
           <tbody>
           <?php foreach ($dons as $don): ?>
             <tr>
               <td><?= e(format_date($don['created_at'])) ?></td>
               <td><?= e(ucfirst((string) ($don['type_don'] ?? ''))) ?></td>
               <td><?= e($don['montant'] ? number_format((float) $don['montant'], 0, ',', ' ') . ' XOF' : (($don['quantite'] ?? '') . ' × ' . ($don['materiel'] ?? ''))) ?></td>
-              <td><?= e($statuts[$don['statut']] ?? (string) $don['statut']) ?></td>
+              <td><?= e($don['montant'] && $don['statut'] !== 'en_attente' ? 'Payé' : ($statuts[$don['statut']] ?? (string) $don['statut'])) ?></td>
+              <td>
+                <?php if ($don['montant'] && $don['statut'] === 'en_attente'): ?>
+                  <a class="btn btn-dark btn-small" href="<?= e(url('paiement.php?don=' . (int) $don['id'])) ?>">Payer</a>
+                <?php elseif ($don['montant']): ?>
+                  <a href="<?= e(url('paiement-effectue.php?don=' . (int) $don['id'])) ?>">Reçu <?= e(paiement_reference($don)) ?></a>
+                <?php endif; ?>
+              </td>
             </tr>
           <?php endforeach; ?>
           </tbody>
